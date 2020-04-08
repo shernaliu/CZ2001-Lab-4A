@@ -134,6 +134,53 @@ public class Graph {
         }
     }
 
+    /**
+     * Obtain the maximum degree.
+     *
+     * @return
+     */
+    public int maxDegree() {
+        int maxDegree = 0;
+        for (Node node : adjacencyMap.keySet()) {
+            if (adjacencyMap.get(node) != null && maxDegree < adjacencyMap.get(node).size()) {
+                maxDegree = adjacencyMap.get(node).size();
+            }
+        }
+        return maxDegree;
+    }
+
+    /**
+     * Print the number of nodes for each k-value
+     * aka how many nodes have degree 0,1,2,3,...
+     */
+    public void printNodeCountForKValue() {
+        int maxDegree = maxDegree();
+        int noOfNodes = 0;
+
+        // count no. of nodes for k=0 (degree of 0)
+        for (Node node : adjacencyMap.keySet()) {
+            if (adjacencyMap.get(node) == null) {
+                noOfNodes += 1;
+            }
+        }
+        System.out.println("k = " + 0 + " has " + noOfNodes + " number of nodes. ");
+        noOfNodes = 0; // reset
+
+        // count no. of nodes for each k-value starting from 1.
+        for (int i = 1; i <= maxDegree; i++) {
+            for (Node node : adjacencyMap.keySet()) {
+                if (adjacencyMap.get(node) != null && adjacencyMap.get(node).size() == i) {
+                    noOfNodes += 1;
+                }
+            }
+            System.out.println("k = " + i + " has " + noOfNodes + " number of nodes. ");
+            noOfNodes = 0; // reset
+        }
+    }
+
+    /**
+     * static Reader class to read from the text file and initialize the graph.
+     */
     static class Reader {
         String txtFileName;
         Graph graph;

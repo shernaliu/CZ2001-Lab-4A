@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Initializing graph, please wait...");
-        Graph graph = new Graph.Reader("p2p-Gnutella08.txt").read(true);
+        Graph graph = new Graph.Reader("test2.txt").read(true);
         System.out.println("Initialization complete.");
         printMenu();
 
@@ -39,10 +39,14 @@ public class Main {
                     System.out.println("(4) - Print degree of nodes");
                     graph.printNodeDegrees();
                     break;
+                case 5:
+                    System.out.println("(5) - Print node count for each k-value");
+                    graph.printNodeCountForKValue();
+                    break;
                 default:
                     System.out.println("Invalid input.");
             }
-            System.out.println("----------------------------------");
+            printMenu();
             System.out.print("Enter input: ");
             userInput = sc.nextInt();
         }
@@ -51,14 +55,16 @@ public class Main {
     }
 
     static void printMenu() {
-        System.out.println("----------------------------------");
-        System.out.println("Welcome to CZ2001 Algorithms!");
+        System.out.println("==================================");
+        System.out.println("============== MENU ==============");
         System.out.println("Select a function:");
         System.out.println("(1) - Print edges");
         System.out.println("(2) - Print node count");
         System.out.println("(3) - Print edge count");
         System.out.println("(4) - Print degree of nodes");
+        System.out.println("(5) - Print node count for each k-value");
+        System.out.println("(6) - Output CSV file");
         System.out.println("(-1) - Exit");
-        System.out.println("----------------------------------");
+        System.out.println("==================================");
     }
 }
