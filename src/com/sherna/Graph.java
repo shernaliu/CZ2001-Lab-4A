@@ -211,14 +211,17 @@ public class Graph {
      */
     public void outputCSV() {
         int maxDegree = maxDegree();
-        int noOfNodes = 0;
+        float noOfNodes = 0;
+        float totalNoOfNodes = adjacencyMap.size();
 
         try (PrintWriter writer = new PrintWriter(new File("data/output.csv"))) {
 
             StringBuilder sb = new StringBuilder();
             sb.append("k-value");
             sb.append(',');
-            sb.append("No. of nodes");
+//            sb.append("No. of nodes");
+//            sb.append(',');
+            sb.append("P(k)");
             sb.append('\n');
 
             // count no. of nodes for k=0 (degree of 0)
@@ -230,7 +233,9 @@ public class Graph {
 
             sb.append("0");
             sb.append(',');
-            sb.append(noOfNodes);
+//            sb.append(noOfNodes);
+//            sb.append(',');
+            sb.append(noOfNodes/totalNoOfNodes);
             sb.append('\n');
 
             noOfNodes = 0; // reset
@@ -245,7 +250,9 @@ public class Graph {
 
                 sb.append(i);
                 sb.append(',');
-                sb.append(noOfNodes);
+//                sb.append(noOfNodes);
+//                sb.append(',');
+                sb.append(noOfNodes/totalNoOfNodes);
                 sb.append('\n');
                 noOfNodes = 0; // reset
             }
