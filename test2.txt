@@ -1,0 +1,9 @@
+FromNodeId	ToNodeId
+A	B
+B	C
+B	D
+C	E
+B	A
+C	B
+D	B
+E	C
