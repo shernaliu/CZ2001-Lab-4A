@@ -3,6 +3,7 @@ package com.sherna;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -119,22 +120,6 @@ public class Graph {
     }
 
     /**
-     * Check if an edge exists from source node to destination node
-     *
-     * @param source      source node
-     * @param destination destination node
-     * @return true if an edge exists from source node to destination node
-     * false if an edge does not exists from source node to destination node
-     */
-    public boolean hasEdge(Node source, Node destination) {
-        if (adjacencyMap.get(source) != null) {
-            return adjacencyMap.containsKey(source) && adjacencyMap.get(source).contains(destination);
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Obtain the maximum degree.
      *
      * @return
@@ -175,6 +160,100 @@ public class Graph {
             }
             System.out.println("k = " + i + " has " + noOfNodes + " number of nodes. ");
             noOfNodes = 0; // reset
+        }
+    }
+
+    /**
+     * Checks if an edge exists from source node to destination node.
+     *
+     * @param source
+     * @param destination
+     */
+    public void hasEdge(String source, String destination) {
+        Node src = null;
+        Node dest = null;
+
+        // search for the source node if it exists
+        for (Node node : adjacencyMap.keySet()) {
+            if (node.name.equalsIgnoreCase(source)) {
+                src = node;
+                break;
+            }
+        }
+
+        // if source node does not exist as a source, then it doesn't have an edge.
+        if (src == null) {
+            System.out.println(source.toUpperCase() + " is not an existing source node.");
+            return;
+        }
+
+        // search for the destination node if it exists
+        for (Node node : adjacencyMap.keySet()) {
+            if (node.name.equalsIgnoreCase(destination)) {
+                dest = node;
+                break;
+            }
+        }
+
+        if (adjacencyMap.get(src) != null) {
+            if (adjacencyMap.containsKey(src) && adjacencyMap.get(src).contains(dest)) {
+                System.out.println("The edge exists from " + source.toUpperCase() + " to " + destination.toUpperCase() + ".");
+            } else {
+                System.out.println("The edge does not exist from " + source.toUpperCase() + " to " + destination.toUpperCase() + ".");
+            }
+        } else {
+            System.out.println("The edge does not exist from " + source.toUpperCase() + " to " + destination.toUpperCase() + ".");
+        }
+    }
+
+    /**
+     * @TODO
+     */
+    public void outputCSV() {
+        int maxDegree = maxDegree();
+        int noOfNodes = 0;
+
+        try (PrintWriter writer = new PrintWriter(new File("data/output.csv"))) {
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("k-value");
+            sb.append(',');
+            sb.append("No. of nodes");
+            sb.append('\n');
+
+            // count no. of nodes for k=0 (degree of 0)
+            for (Node node : adjacencyMap.keySet()) {
+                if (adjacencyMap.get(node) == null) {
+                    noOfNodes += 1;
+                }
+            }
+
+            sb.append("0");
+            sb.append(',');
+            sb.append(noOfNodes);
+            sb.append('\n');
+
+            noOfNodes = 0; // reset
+
+            // count no. of nodes for each k-value starting from 1.
+            for (int i = 1; i <= maxDegree; i++) {
+                for (Node node : adjacencyMap.keySet()) {
+                    if (adjacencyMap.get(node) != null && adjacencyMap.get(node).size() == i) {
+                        noOfNodes += 1;
+                    }
+                }
+
+                sb.append(i);
+                sb.append(',');
+                sb.append(noOfNodes);
+                sb.append('\n');
+                noOfNodes = 0; // reset
+            }
+
+            writer.write(sb.toString());
+            System.out.println("Done!");
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -248,6 +327,10 @@ public class Graph {
             }
 
             return graph;
+        }
+
+        void outputCSV() {
+
         }
     }
 }

@@ -12,9 +12,12 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Initializing graph, please wait...");
-        Graph graph = new Graph.Reader("test2.txt").read(true);
+        Graph graph = new Graph.Reader("data/p2p-Gnutella08.txt").read(true);
         System.out.println("Initialization complete.");
         printMenu();
+
+        String srcNode = null;
+        String destNode = null;
 
         // get user input
         Scanner sc = new Scanner(System.in);
@@ -43,6 +46,19 @@ public class Main {
                     System.out.println("(5) - Print node count for each k-value");
                     graph.printNodeCountForKValue();
                     break;
+                case 6:
+                    System.out.println("(6) - Check if source node has an edge to destination node");
+                    System.out.println("Enter input for source node: ");
+                    sc.nextLine();
+                    srcNode = sc.nextLine();
+                    System.out.println("Enter input for destination node: ");
+                    destNode = sc.nextLine();
+                    graph.hasEdge(srcNode, destNode);
+                    break;
+                case 7:
+                    System.out.println("(7) - Output CSV");
+                    graph.outputCSV();
+                    break;
                 default:
                     System.out.println("Invalid input.");
             }
@@ -63,7 +79,8 @@ public class Main {
         System.out.println("(3) - Print edge count");
         System.out.println("(4) - Print degree of nodes");
         System.out.println("(5) - Print node count for each k-value");
-        System.out.println("(6) - Output CSV file");
+        System.out.println("(6) - Check if source node has an edge to destination node");
+        System.out.println("(7) - Output CSV");
         System.out.println("(-1) - Exit");
         System.out.println("==================================");
     }
