@@ -1,12 +1,11 @@
 package com.sherna;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Scanner;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.*;
+
+import java.io.*;
+import java.util.*;
 
 /*
  * @author sherna
@@ -114,9 +113,11 @@ public class Graph {
         System.out.println("Edge count: " + edgeCount);
     }
 
+    /**
+     * if the linkedlist for that node is empty, then its degree is 0
+     */
     public void printNodeDegrees() {
         for (Node node : adjacencyMap.keySet()) {
-            // if the linkedlist for that node is empty, then its degree is 0
             if (adjacencyMap.get(node) != null) {
                 System.out.println("The node " + node.name + " has a degree of: " + adjacencyMap.get(node).size());
             } else {
@@ -212,55 +213,96 @@ public class Graph {
         }
     }
 
-    /**
-     * Output results to a CSV file to use Excel for analysis.
-     */
-    public void outputCSV() {
+    public void outputExcelFile() {
         int maxDegree = maxDegree();
         float noOfNodes = 0;
         float totalNoOfNodes = adjacencyMap.size();
 
-        try (PrintWriter writer = new PrintWriter(new File("data/output-" + this.fileName + ".csv"))) {
+        // Blank workbook
+        XSSFWorkbook workbook = new XSSFWorkbook();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("k-value");
-            sb.append(',');
-            sb.append("P(k)");
-            sb.append('\n');
+        // Create a blank sheet
+        XSSFSheet sheet = workbook.createSheet("Scatterplot");
 
-            // count no. of nodes for k=0 (degree of 0)
+        int rownum = 0;
+        int cellnum = 0;
+        Row row = null;
+        Cell cell = null;
+
+        // write header
+        row = sheet.createRow(rownum++);
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("k-value");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("No. of nodes");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("ln k");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("ln P");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("Total no. of nodes");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("bin_lower");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("bin_upper");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("bins (k-value)");
+        cell = row.createCell(cellnum++);
+        cell.setCellValue("rel. freq (no. of nodes)");
+
+        // count no. of nodes for k=0 (degree of 0)
+        for (Node node : adjacencyMap.keySet()) {
+            if (adjacencyMap.get(node) == null) {
+                noOfNodes += 1;
+            }
+        }
+
+        // write no. of nodes for k=0 (degree of 0)
+        cellnum = 0;
+        row = sheet.createRow(rownum++);
+        cell = row.createCell(cellnum++);
+        cell.setCellValue(0);
+        cell = row.createCell(cellnum++);
+        cell.setCellValue(noOfNodes);
+        // ln(0) is undefined
+        cell = row.createCell(cellnum++);
+        cell.setCellValue(Math.log(0)); // ln k
+        cell = row.createCell(cellnum++);
+        cell.setCellValue(Math.log(noOfNodes)); // ln P
+        cell = row.createCell(cellnum++);
+        cell.setCellValue(adjacencyMap.size()); // total no. of nodes
+        noOfNodes = 0; // reset
+
+        // count no. of nodes for each k-value starting from 1.
+        for (int i = 1, j = 5; i <= maxDegree; i++, j += 1) {
             for (Node node : adjacencyMap.keySet()) {
-                if (adjacencyMap.get(node) == null) {
+                if (adjacencyMap.get(node) != null && adjacencyMap.get(node).size() == i) {
                     noOfNodes += 1;
                 }
             }
 
-            sb.append("0");
-            sb.append(',');
-            sb.append(noOfNodes / totalNoOfNodes);
-            sb.append('\n');
-
+            // write no. of nodes for k=1,2,3,...,maxDegree
+            cellnum = 0;
+            row = sheet.createRow(rownum++);
+            cell = row.createCell(cellnum++);
+            cell.setCellValue(i); // k-value
+            cell = row.createCell(cellnum++);
+            cell.setCellValue(noOfNodes);
+            cell = row.createCell(cellnum++);
+            cell.setCellValue(Math.log(i)); // ln k
+            cell = row.createCell(cellnum++);
+            cell.setCellValue(Math.log(noOfNodes)); // ln P
             noOfNodes = 0; // reset
+        }
 
-            // count no. of nodes for each k-value starting from 1.
-            for (int i = 1; i <= maxDegree; i++) {
-                for (Node node : adjacencyMap.keySet()) {
-                    if (adjacencyMap.get(node) != null && adjacencyMap.get(node).size() == i) {
-                        noOfNodes += 1;
-                    }
-                }
 
-                sb.append(i);
-                sb.append(',');
-                sb.append(noOfNodes / totalNoOfNodes);
-                sb.append('\n');
-                noOfNodes = 0; // reset
-            }
-
-            writer.write(sb.toString());
-            System.out.println("Done. Output file name is " + "data/output-" + this.fileName + ".csv");
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+        try {
+            FileOutputStream out = new FileOutputStream(new File("data/output-" + this.fileName + ".xlsx"));
+            workbook.write(out);
+            out.close();
+            System.out.println("Done. Output file name is " + "data/output-" + this.fileName + ".xlsx");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

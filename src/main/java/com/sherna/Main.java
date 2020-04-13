@@ -56,8 +56,8 @@ public class Main {
                     graph.hasEdge(srcNode, destNode);
                     break;
                 case 7:
-                    System.out.println("(7) - Output CSV");
-                    graph.outputCSV();
+                    System.out.println("(7) - Output Excel File");
+                    graph.outputExcelFile();
                     break;
                 default:
                     System.out.println("Invalid input.");
@@ -80,7 +80,7 @@ public class Main {
         System.out.println("(4) - Print degree of nodes");
         System.out.println("(5) - Print node count for each k-value");
         System.out.println("(6) - Check if source node has an edge to destination node");
-        System.out.println("(7) - Output CSV");
+        System.out.println("(7) - Output Excel File");
         System.out.println("(0) - Exit");
         System.out.println("==================================");
     }
