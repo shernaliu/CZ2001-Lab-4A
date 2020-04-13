@@ -17,15 +17,21 @@ public class Graph {
     // Each node maps to a list of all his neighbors
     public HashMap<Node, LinkedList<Node>> adjacencyMap;
     public boolean directed;
+    public String fileName;
 
     /**
      * Constructor
      *
      * @param directed true if graph is directed
      *                 false if graph is undirected
+     *                 note for undirected graph:
+     *                 if text file has A -> B and B -> A, then pass parameter directed = true
+     *                 if text file has A -> B but not B -> A, then pass parameter directed = false
+     * @param fileName name of the file
      */
-    public Graph(boolean directed) {
+    public Graph(boolean directed, String fileName) {
         this.directed = directed;
+        this.fileName = fileName;
         adjacencyMap = new HashMap<>();
     }
 
@@ -34,8 +40,8 @@ public class Graph {
      * Before adding an edge between A and B, we'll first remove it and only then add it.
      * If it existed (we're adding a duplicate edge), it was removed and after adding it again, there's only one.
      *
-     * @param a
-     * @param b
+     * @param a source node
+     * @param b destination node
      */
     public void addEdgeHelper(Node a, Node b) {
         LinkedList<Node> tmp = adjacencyMap.get(a);
@@ -50,8 +56,8 @@ public class Graph {
     /**
      * Actual method to add an edge from source node to destination node.
      *
-     * @param source
-     * @param destination
+     * @param source      source node
+     * @param destination destination node
      */
     public void addEdge(Node source, Node destination) {
 
@@ -122,7 +128,7 @@ public class Graph {
     /**
      * Obtain the maximum degree.
      *
-     * @return
+     * @return maximum degree
      */
     public int maxDegree() {
         int maxDegree = 0;
@@ -207,20 +213,18 @@ public class Graph {
     }
 
     /**
-     * @TODO
+     * Output results to a CSV file to use Excel for analysis.
      */
     public void outputCSV() {
         int maxDegree = maxDegree();
         float noOfNodes = 0;
         float totalNoOfNodes = adjacencyMap.size();
 
-        try (PrintWriter writer = new PrintWriter(new File("data/output.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("data/output-" + this.fileName + ".csv"))) {
 
             StringBuilder sb = new StringBuilder();
             sb.append("k-value");
             sb.append(',');
-//            sb.append("No. of nodes");
-//            sb.append(',');
             sb.append("P(k)");
             sb.append('\n');
 
@@ -233,9 +237,7 @@ public class Graph {
 
             sb.append("0");
             sb.append(',');
-//            sb.append(noOfNodes);
-//            sb.append(',');
-            sb.append(noOfNodes/totalNoOfNodes);
+            sb.append(noOfNodes / totalNoOfNodes);
             sb.append('\n');
 
             noOfNodes = 0; // reset
@@ -250,15 +252,13 @@ public class Graph {
 
                 sb.append(i);
                 sb.append(',');
-//                sb.append(noOfNodes);
-//                sb.append(',');
-                sb.append(noOfNodes/totalNoOfNodes);
+                sb.append(noOfNodes / totalNoOfNodes);
                 sb.append('\n');
                 noOfNodes = 0; // reset
             }
 
             writer.write(sb.toString());
-            System.out.println("Done!");
+            System.out.println("Done. Output file name is " + "data/output-" + this.fileName + ".csv");
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -275,18 +275,18 @@ public class Graph {
             this.txtFileName = txtFileName;
         }
 
-        Graph read(boolean isDirected) {
+        Graph read(boolean isDirected, String fileName) {
             Graph g = null;
             try {
-                g = scanGraph(isDirected);
+                g = scanGraph(isDirected, fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return g;
         }
 
-        Graph scanGraph(boolean isDirected) throws FileNotFoundException {
-            graph = new Graph(isDirected);
+        Graph scanGraph(boolean isDirected, String fileName) throws FileNotFoundException {
+            graph = new Graph(isDirected, fileName);
             Scanner sc = new Scanner(new File(txtFileName));
             sc.nextLine();
             while (sc.hasNextLine()) {
@@ -334,10 +334,6 @@ public class Graph {
             }
 
             return graph;
-        }
-
-        void outputCSV() {
-
         }
     }
 }

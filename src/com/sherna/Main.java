@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Initializing graph, please wait...");
-        Graph graph = new Graph.Reader("data/p2p-Gnutella08.txt").read(true);
+        Graph graph = new Graph.Reader("data/Wiki-Vote.txt").read(true, "Wiki-Vote");
         System.out.println("Initialization complete.");
         printMenu();
 
