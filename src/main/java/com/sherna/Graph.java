@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class Graph {
     // Each node maps to a list of all his neighbors
-    public HashMap<Node, LinkedList<Node>> adjacencyMap;
+    public HashMap<Node, LinkedList<Node>> map;
     public boolean directed;
     public String fileName;
 
@@ -31,7 +31,7 @@ public class Graph {
     public Graph(boolean directed, String fileName) {
         this.directed = directed;
         this.fileName = fileName;
-        adjacencyMap = new HashMap<>();
+        map = new HashMap<>();
     }
 
     /**
@@ -43,13 +43,13 @@ public class Graph {
      * @param b destination node
      */
     public void addEdgeHelper(Node a, Node b) {
-        LinkedList<Node> tmp = adjacencyMap.get(a);
+        LinkedList<Node> tmp = map.get(a);
 
         if (tmp != null) {
             tmp.remove(b);
         } else tmp = new LinkedList<>();
         tmp.add(b);
-        adjacencyMap.put(a, tmp);
+        map.put(a, tmp);
     }
 
     /**
@@ -61,11 +61,11 @@ public class Graph {
     public void addEdge(Node source, Node destination) {
 
         // We make sure that every used node shows up in our .keySet()
-        if (!adjacencyMap.keySet().contains(source))
-            adjacencyMap.put(source, null);
+        if (!map.keySet().contains(source))
+            map.put(source, null);
 
-        if (!adjacencyMap.keySet().contains(destination))
-            adjacencyMap.put(destination, null);
+        if (!map.keySet().contains(destination))
+            map.put(destination, null);
 
         addEdgeHelper(source, destination);
 
@@ -79,11 +79,11 @@ public class Graph {
      * Print the edges of the graph.
      */
     public void printEdges() {
-        for (Node node : adjacencyMap.keySet()) {
+        for (Node node : map.keySet()) {
             System.out.print("The node " + node.name + " has an edge towards: ");
             // if the linkedlist for that node is empty, then there is no edge.
-            if (adjacencyMap.get(node) != null) {
-                for (Node neighbor : adjacencyMap.get(node)) {
+            if (map.get(node) != null) {
+                for (Node neighbor : map.get(node)) {
                     System.out.print(neighbor.name + " ");
                 }
             } else {
@@ -97,7 +97,7 @@ public class Graph {
      * Print the total number of nodes.
      */
     public void printNodeCount() {
-        System.out.println("Node count: " + adjacencyMap.size());
+        System.out.println("Node count: " + map.size());
     }
 
     /**
@@ -105,9 +105,9 @@ public class Graph {
      */
     public void printEdgeCount() {
         int edgeCount = 0;
-        for (Node node : adjacencyMap.keySet()) {
-            if (adjacencyMap.get(node) != null) {
-                edgeCount += adjacencyMap.get(node).size();
+        for (Node node : map.keySet()) {
+            if (map.get(node) != null) {
+                edgeCount += map.get(node).size();
             }
         }
         System.out.println("Edge count: " + edgeCount);
@@ -117,12 +117,11 @@ public class Graph {
      * if the linkedlist for that node is empty, then its degree is 0
      */
     public void printNodeDegrees() {
-        for (Node node : adjacencyMap.keySet()) {
-            if (adjacencyMap.get(node) != null) {
-                System.out.println("The node " + node.name + " has a degree of: " + adjacencyMap.get(node).size());
-            } else {
-                System.out.println("The node " + node.name + " has a degree of: 0");
-            }
+        for (Node node : map.keySet()) {
+            if (map.get(node) == null)
+                System.out.println(node.name + " has degree 0");
+            if (map.get(node) != null)
+                System.out.println(node.name + " has degree " + map.get(node).size());
         }
     }
 
@@ -133,9 +132,9 @@ public class Graph {
      */
     public int maxDegree() {
         int maxDegree = 0;
-        for (Node node : adjacencyMap.keySet()) {
-            if (adjacencyMap.get(node) != null && maxDegree < adjacencyMap.get(node).size()) {
-                maxDegree = adjacencyMap.get(node).size();
+        for (Node node : map.keySet()) {
+            if (map.get(node) != null && maxDegree < map.get(node).size()) {
+                maxDegree = map.get(node).size();
             }
         }
         return maxDegree;
@@ -150,8 +149,8 @@ public class Graph {
         int noOfNodes = 0;
 
         // count no. of nodes for k=0 (degree of 0)
-        for (Node node : adjacencyMap.keySet()) {
-            if (adjacencyMap.get(node) == null) {
+        for (Node node : map.keySet()) {
+            if (map.get(node) == null) {
                 noOfNodes += 1;
             }
         }
@@ -160,8 +159,8 @@ public class Graph {
 
         // count no. of nodes for each k-value starting from 1.
         for (int i = 1; i <= maxDegree; i++) {
-            for (Node node : adjacencyMap.keySet()) {
-                if (adjacencyMap.get(node) != null && adjacencyMap.get(node).size() == i) {
+            for (Node node : map.keySet()) {
+                if (map.get(node) != null && map.get(node).size() == i) {
                     noOfNodes += 1;
                 }
             }
@@ -181,7 +180,7 @@ public class Graph {
         Node dest = null;
 
         // search for the source node if it exists
-        for (Node node : adjacencyMap.keySet()) {
+        for (Node node : map.keySet()) {
             if (node.name.equalsIgnoreCase(source)) {
                 src = node;
                 break;
@@ -195,15 +194,15 @@ public class Graph {
         }
 
         // search for the destination node if it exists
-        for (Node node : adjacencyMap.keySet()) {
+        for (Node node : map.keySet()) {
             if (node.name.equalsIgnoreCase(destination)) {
                 dest = node;
                 break;
             }
         }
 
-        if (adjacencyMap.get(src) != null) {
-            if (adjacencyMap.containsKey(src) && adjacencyMap.get(src).contains(dest)) {
+        if (map.get(src) != null) {
+            if (map.containsKey(src) && map.get(src).contains(dest)) {
                 System.out.println("The edge exists from " + source.toUpperCase() + " to " + destination.toUpperCase() + ".");
             } else {
                 System.out.println("The edge does not exist from " + source.toUpperCase() + " to " + destination.toUpperCase() + ".");
@@ -216,7 +215,7 @@ public class Graph {
     public void outputExcelFile() {
         int maxDegree = maxDegree();
         float noOfNodes = 0;
-        float totalNoOfNodes = adjacencyMap.size();
+        float totalNoOfNodes = map.size();
 
         // Blank workbook
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -251,8 +250,8 @@ public class Graph {
         cell.setCellValue("rel. freq (no. of nodes)");
 
         // count no. of nodes for k=0 (degree of 0)
-        for (Node node : adjacencyMap.keySet()) {
-            if (adjacencyMap.get(node) == null) {
+        for (Node node : map.keySet()) {
+            if (map.get(node) == null) {
                 noOfNodes += 1;
             }
         }
@@ -270,13 +269,13 @@ public class Graph {
         cell = row.createCell(cellnum++);
         cell.setCellValue(Math.log(noOfNodes)); // ln P
         cell = row.createCell(cellnum++);
-        cell.setCellValue(adjacencyMap.size()); // total no. of nodes
+        cell.setCellValue(map.size()); // total no. of nodes
         noOfNodes = 0; // reset
 
         // count no. of nodes for each k-value starting from 1.
         for (int i = 1, j = 5; i <= maxDegree; i++, j += 1) {
-            for (Node node : adjacencyMap.keySet()) {
-                if (adjacencyMap.get(node) != null && adjacencyMap.get(node).size() == i) {
+            for (Node node : map.keySet()) {
+                if (map.get(node) != null && map.get(node).size() == i) {
                     noOfNodes += 1;
                 }
             }
@@ -340,9 +339,9 @@ public class Graph {
                 Node srcNode = null;
                 Node destNode = null;
 
-                if (graph.adjacencyMap.keySet().size() != 0) {
+                if (graph.map.keySet().size() != 0) {
                     // check if str1 is an existing node
-                    for (Node n : graph.adjacencyMap.keySet()) {
+                    for (Node n : graph.map.keySet()) {
                         if (n.name.equals(str1)) {
                             srcNode = n;
                             break;
@@ -350,7 +349,7 @@ public class Graph {
                     }
 
                     // check if str2 is an existing node
-                    for (Node n : graph.adjacencyMap.keySet()) {
+                    for (Node n : graph.map.keySet()) {
                         if (n.name.equals(str2)) {
                             destNode = n;
                             break;
