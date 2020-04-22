@@ -39,7 +39,6 @@ All dependencies are maintained in pom.xml file which is managed automatically w
 
 This project uses Apache POI to output the computed data and results to Excel spreadsheet `.xlsx` file.
 
-
 ## Related Repositories
 
 There are 3 repositories created for both projects of Lab 4.
@@ -48,7 +47,4 @@ There are 3 repositories created for both projects of Lab 4.
 
 2. [CZ2001-Lab-4B - Application of BFS to Flight Scheduling](https://github.com/shernaliu/CZ2001-Lab-4B)
 
-3. [CZ2001-Lab-4B-Graph - Visualization of a graph using python]()
-
-
-
+3. [CZ2001-Lab-4B-Graph - Visualization of a graph using Python Jupyter notebook](https://github.com/shernaliu/CZ2001-Lab-4B-Graph)
