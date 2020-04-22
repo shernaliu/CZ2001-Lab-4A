@@ -43,7 +43,7 @@ This project uses Apache POI to output the computed data and results to Excel sp
 
 There are 3 repositories created for both projects of Lab 4.
 
-1. [CZ2001-Lab-4A - Statistical & Topological Analysis of Social Networks](https://github.com/shernaliu/CZ2001-Lab-4A) (You are here!)
+1. [CZ2001-Lab-4A - Statistical & Topological Analysis of Social Networks](https://github.com/shernaliu/CZ2001-Lab-4A) :point_left: You are here!
 
 2. [CZ2001-Lab-4B - Application of BFS to Flight Scheduling](https://github.com/shernaliu/CZ2001-Lab-4B)
 
