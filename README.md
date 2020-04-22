@@ -1,4 +1,4 @@
-# CZ2001-Lab4A - Statistical & Topological Analysis of Social Networks
+# CZ2001-Lab-4A - Statistical & Topological Analysis of Social Networks
 
 This project is a Java console application developed by shernaliu for CZ2001 Algorithms Lab 4A.
 
