@@ -27,7 +27,7 @@ This project uses the dataset [GR-QC Network](https://snap.stanford.edu/data/ca-
 
 ![CZ2001-Lab-4B-Scatterplot](https://res.cloudinary.com/shernaliu/image/upload/v1587586923/github-never-delete/CZ2001-LAB-4A-Scatterplot.png)
 
-## Installing CZ2001-Lab4A
+## Installing CZ2001-Lab-4A
 
 ```
 # clone this project
